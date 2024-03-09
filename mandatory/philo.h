@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 01:03:30 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/02/16 18:03:46 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/03/09 19:15:28 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@
 # define CYAN "\033[96m"
 # define RESET "\033[0m"
 
+typedef struct s_x t_env;
+
 typedef struct s_philo
 {
 	unsigned long			time_to_die;
@@ -41,6 +43,7 @@ typedef struct s_philo
 	int						index;
 	pthread_mutex_t			ph_mutex;
 	pthread_mutex_t			ph_mutex_print_eat;
+	t_env					*env;
 }	t_philo;
 
 typedef struct s_x

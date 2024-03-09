@@ -6,7 +6,7 @@
 #    By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/03 21:43:44 by aalatzas          #+#    #+#              #
-#    Updated: 2024/02/04 02:53:13 by aalatzas         ###   ########.fr        #
+#    Updated: 2024/03/09 18:02:53 by aalatzas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,9 +43,10 @@ fclean: clean
 	@rm -f $(NAME)
 
 t1: $(NAME)
+	@./$(NAME) 5 20 20 20 2
 
 t2: $(NAME)
-
+	@./$(NAME) 10 10 10 10
 t: $(NAME)
 
 re: fclean all

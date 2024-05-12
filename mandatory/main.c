@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 22:01:43 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/02/16 16:26:40 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/05/12 10:47:31 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	main(int argc, char **argv)
 	if (env.ph == NULL)
 		return (printf("ERROR: Memory allocation failed!\n"), 1);
 	save_values(argv, &env);
-	greate_thread(&env);
+	init_threads(&env);
 	free(env.ph);
 	return (0);
 }

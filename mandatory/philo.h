@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 01:03:30 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/03/09 19:15:28 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/05/12 10:48:24 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ typedef struct s_philo
 	unsigned long			times_philo_eat;
 	char					*argv_5;
 	int						index;
-	pthread_mutex_t			ph_mutex;
-	pthread_mutex_t			ph_mutex_print_eat;
+	pthread_mutex_t			ph_mutex_left_fork;
+	pthread_mutex_t			ph_mutex_right_fork;
 	t_env					*env;
 }	t_philo;
 
@@ -55,13 +55,14 @@ typedef struct s_x
 	pthread_mutex_t			mutex;
 	unsigned long			sec;
 	unsigned long			usec;
+	int						run;
 	t_philo					*ph;
 }	t_env;
 
 
 int							ft_atoi(const char *str);
 void						is_all_int(int argc, char **argv);
-int							greate_thread(t_env *tx);
+int 						init_threads(t_env *env);
 unsigned long long			get_time();
 
 #endif

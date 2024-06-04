@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 01:03:30 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/05/12 10:48:24 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/04 19:18:11 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <unistd.h>
 # include <sys/time.h>
 # include <pthread.h>
+# include <stdbool.h>
 
 # define CRY "\U0001F622"
 
@@ -35,10 +36,10 @@ typedef struct s_x t_env;
 
 typedef struct s_philo
 {
-	unsigned long			time_to_die;
-	unsigned long			time_to_eat;
-	unsigned long			time_to_sleep;
-	unsigned long			times_philo_eat;
+	int						time_to_die;
+	int						time_to_eat;
+	int						time_to_sleep;
+	int						philo_meals;
 	char					*argv_5;
 	int						index;
 	pthread_mutex_t			ph_mutex_left_fork;
@@ -51,6 +52,8 @@ typedef struct s_x
 	int						i;
 	int						x;
 	int						y;
+	bool					death;
+	int						min_meals;
 	int						philo_nbr;
 	pthread_mutex_t			mutex;
 	unsigned long			sec;

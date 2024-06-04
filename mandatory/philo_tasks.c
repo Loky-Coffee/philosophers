@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 02:04:21 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/05/12 10:47:49 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/04 19:31:19 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,25 +67,68 @@ int can_eat(t_philo *ph)
 void *schedule_action(void *arg)
 {
 	t_philo *ph = (t_philo *)arg;
-	while (ph->env->run && ph->times_philo_eat > 0)
+	int i = 0;
+	// printf("-------------------------\n");
+	while (true)
 	{
-		int i = 0;
-		if (ph->times_philo_eat <= 0 && ph->argv_5 != NULL)
-			break;
 		pthread_mutex_lock(&ph->env->mutex);
-		while (i < 1000)
-		{
-			i++;
-		}
-		if (ph->argv_5 != 0)
-			ph->times_philo_eat--;
-		printf("philo [%d] is eating\n", i);
+		// printf("philo[%i] ph->env->min_meals [%d] ph->philo_meals [%d]\n", ph->index, ph->env->min_meals, ph->philo_meals);
 		printf("philo [%d] is eating\n", ph->index);
+		if (ph->env->min_meals > 0)
+		{
+			if (ph->philo_meals == ph->env->min_meals)
+			{
+				printf("Philo ->>[%i] #####break###\n", ph->index);
+				pthread_mutex_unlock(&ph->env->mutex);
+				break;
+			}
+			ph->philo_meals++;
+		}
 		pthread_mutex_unlock(&ph->env->mutex);
-		if (ph->argv_5 != 0)
-			ph->times_philo_eat--;
+		i++;
 	}
 	return NULL;
+}
+
+int join_threads(t_env *env, int result, pthread_t	*t)
+{
+	int i = 0;
+
+	if (result == 0)
+	{
+		i = 0;
+		while (i < 200)
+		{
+			if(pthread_join(t[i], NULL) != 0)
+			{
+				result = env->ph[i].index;
+				break;
+			}
+			i++;
+		}
+	}
+	return (result);
+}
+
+int init_threads(t_env *env)
+{
+	pthread_t	t[200];
+	int			result = 0;
+
+	int i = 0;
+	pthread_mutex_init(&env->mutex, NULL);
+	while (i < env->philo_nbr)
+	{
+		if (pthread_create(&t[i], NULL, schedule_action, (void *)&env->ph[i]) != 0)
+		{
+			result = env->ph[i].index;
+			break;
+		}
+		i++;
+	}
+	join_threads(env, result, t);
+	pthread_mutex_destroy(&env->mutex);
+	return result;
 }
 
 // void *schedule_action(void *arg)
@@ -117,45 +160,3 @@ void *schedule_action(void *arg)
 // 	}
 // 	return NULL;
 // }
-
-int join_threads(t_env *env, int result, pthread_t	*t)
-{
-	if (result == 0)
-	{
-		env->x = 0;
-		while (env->x < env->i)
-		{
-			if(pthread_join(t[env->x], NULL) != 0)
-			{
-				printf("ERROR Join Thread: %d\n", env->ph[env->x].index);
-				result = env->ph[env->x].index;
-				break;
-			}
-			env->x++;
-		}
-	}
-	return (result);
-}
-
-int init_threads(t_env *env)
-{
-	pthread_t	t[env->philo_nbr];
-	int			result = 0;
-
-	env->i = 0;
-	pthread_mutex_init(&env->ph->env->mutex, NULL);
-	while (env->i < env->philo_nbr)
-	{
-		if (pthread_create(&t[env->i], NULL, schedule_action, (void *)&env->ph[env->i]) != 0)
-		{
-			printf("ERROR Thread: %d\n", env->ph[env->i].index);
-			result = env->ph[env->i].index;
-			break;
-		}
-		env->i++;
-	}
-	env->i = 0;
-	pthread_mutex_destroy(&env->ph->env->mutex);
-	join_threads(env, result, t);
-	return result;
-}

@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 01:03:30 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/06 21:51:17 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/07 21:38:01 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,6 @@ int							ft_atoi(const char *str);
 void						is_all_int(int argc, char **argv);
 int 						init_threads(t_env *env);
 unsigned long long int		get_time();
+void						terminate(t_env *env, int i);
 
 #endif

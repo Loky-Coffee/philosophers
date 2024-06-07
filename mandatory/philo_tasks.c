@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 02:04:21 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/04 19:31:19 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/07 02:47:03 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,11 @@ int can_eat(t_philo *ph)
 	right_fork = 0;
 	// printf("ph->env->philo_nbr [%d]\n", ph->env->philo_nbr);
 	// right_fork = (ph->index + 1) % ph->env->philo_nbr;
-	pthread_mutex_lock(&ph->ph_mutex_left_fork);
+	// pthread_mutex_lock(&ph->ph_mutex_left_fork);
 	printf("philo [%d] is eating\n", ph->index);
 	// if (pthread_mutex_lock(&ph->env->ph[right_fork].ph_mutex_left_fork) == 0)
 	// 	return 1;
-	pthread_mutex_unlock(&ph->ph_mutex_left_fork);
+	// pthread_mutex_unlock(&ph->ph_mutex_left_fork);
 	return 0;
 }
 
@@ -68,23 +68,79 @@ void *schedule_action(void *arg)
 {
 	t_philo *ph = (t_philo *)arg;
 	int i = 0;
-	// printf("-------------------------\n");
+	if (ph->index % 2 == 0)
+		usleep(50000);
 	while (true)
 	{
-		pthread_mutex_lock(&ph->env->mutex);
-		// printf("philo[%i] ph->env->min_meals [%d] ph->philo_meals [%d]\n", ph->index, ph->env->min_meals, ph->philo_meals);
-		printf("philo [%d] is eating\n", ph->index);
+		// pthread_mutex_lock(&ph->env->mutex);
+		if ((ph->index + 1) == ph->env->philo_nbr)
+		{
+			pthread_mutex_lock(&ph->env->lock_left_fork[ph->index - 1]);
+			pthread_mutex_lock(&ph->env->lock_right_fork[0]);
+		}
+		else if (ph->index % 2 == 0)
+		{
+			pthread_mutex_lock(&ph->env->lock_left_fork[(ph->index + 1) % ph->env->philo_nbr]);
+			pthread_mutex_lock(&ph->env->lock_right_fork[ph->index]);
+		}
+		else
+		{
+			// pthread_mutex_lock(&ph->env->lock_right_fork[ph->index]);
+			pthread_mutex_lock(&ph->env->lock_left_fork[ph->index]);
+			pthread_mutex_lock(&ph->env->lock_right_fork[(ph->index + 1) % ph->env->philo_nbr]);
+		}
+		// pthread_mutex_unlock(&ph->env->mutex);
+		printf("%llu %d has taken a fork\n", get_time(), ph->index + 1);
+		// printf("ph->index[%d]    ph->env->philo_nbr[%d]\n",ph->index + 1, ph->env->philo_nbr);
 		if (ph->env->min_meals > 0)
 		{
+			printf("%llu %d is eating\n", get_time(), ph->index + 1);
+			usleep(ph->time_to_eat * 10);
 			if (ph->philo_meals == ph->env->min_meals)
 			{
-				printf("Philo ->>[%i] #####break###\n", ph->index);
-				pthread_mutex_unlock(&ph->env->mutex);
+				if ((ph->index + 1) == ph->env->philo_nbr)
+				{
+					pthread_mutex_unlock(&ph->env->lock_left_fork[ph->index - 1]);
+					pthread_mutex_unlock(&ph->env->lock_right_fork[0]);
+				}
+				else if (ph->index % 2 == 0)
+				{
+					pthread_mutex_unlock(&ph->env->lock_left_fork[(ph->index + 1) % ph->env->philo_nbr]);
+					pthread_mutex_unlock(&ph->env->lock_right_fork[ph->index]);
+				}
+				else
+				{
+					pthread_mutex_unlock(&ph->env->lock_left_fork[ph->index]);
+					pthread_mutex_unlock(&ph->env->lock_right_fork[(ph->index + 1) % ph->env->philo_nbr]);
+				}
+				// pthread_mutex_unlock(&ph->env->lock_right_fork[ph->index]);
 				break;
 			}
 			ph->philo_meals++;
 		}
-		pthread_mutex_unlock(&ph->env->mutex);
+		if ((ph->index + 1) == ph->env->philo_nbr)
+		{
+			pthread_mutex_unlock(&ph->env->lock_left_fork[ph->index - 1]);
+			pthread_mutex_unlock(&ph->env->lock_right_fork[0]);
+		}
+		else if (ph->index % 2 == 0)
+		{
+			pthread_mutex_unlock(&ph->env->lock_left_fork[(ph->index + 1) % ph->env->philo_nbr]);
+			pthread_mutex_unlock(&ph->env->lock_right_fork[ph->index]);
+		}
+		else
+		{
+			pthread_mutex_unlock(&ph->env->lock_left_fork[ph->index]);
+			pthread_mutex_unlock(&ph->env->lock_right_fork[(ph->index + 1) % ph->env->philo_nbr]);
+		}
+		// pthread_mutex_unlock(&ph->env->lock_right_fork[ph->index]);
+		printf("%llu %d is sleeping\n", get_time(), ph->index + 1);
+		usleep(ph->time_to_sleep * 10);
+		printf("%llu %d is thinking\n", get_time(), ph->index + 1);
+		// if (ph->env->philo_nbr % 2 == 0)
+		// 	usleep((ph->time_to_die - (ph->time_to_eat + ph->time_to_sleep)) * 10);
+		// else
+		// 	usleep((ph->time_to_die - (ph->time_to_eat + ph->time_to_sleep)) * 5);
 		i++;
 	}
 	return NULL;
@@ -97,7 +153,7 @@ int join_threads(t_env *env, int result, pthread_t	*t)
 	if (result == 0)
 	{
 		i = 0;
-		while (i < 200)
+		while (i < env->philo_nbr)
 		{
 			if(pthread_join(t[i], NULL) != 0)
 			{
@@ -117,8 +173,12 @@ int init_threads(t_env *env)
 
 	int i = 0;
 	pthread_mutex_init(&env->mutex, NULL);
+	env->lock_left_fork = malloc(env->philo_nbr * sizeof(pthread_mutex_t));
+	env->lock_right_fork = malloc(env->philo_nbr * sizeof(pthread_mutex_t));
 	while (i < env->philo_nbr)
 	{
+		pthread_mutex_init(&env->lock_left_fork[i], NULL);
+		pthread_mutex_init(&env->lock_right_fork[i], NULL);
 		if (pthread_create(&t[i], NULL, schedule_action, (void *)&env->ph[i]) != 0)
 		{
 			result = env->ph[i].index;
@@ -126,37 +186,17 @@ int init_threads(t_env *env)
 		}
 		i++;
 	}
+	pthread_mutex_init(&env->lock_left_fork[i], NULL);
+	pthread_mutex_init(&env->lock_right_fork[i], NULL);
 	join_threads(env, result, t);
 	pthread_mutex_destroy(&env->mutex);
+	while (i != -1)
+	{
+		pthread_mutex_destroy(&env->lock_left_fork[i]);
+		pthread_mutex_destroy(&env->lock_right_fork[i]);
+		i--;
+	}
+	free(env->lock_left_fork);
+	// free(env->lock_right_fork);
 	return result;
 }
-
-// void *schedule_action(void *arg)
-// {
-// 	t_philo *ph = (t_philo *)arg;
-// 	while (ph->time_to_die != 0)
-// 	{
-// 		int i = 0;
-// 		if (ph->times_philo_eat <= 0 && ph->argv_5 != NULL)
-// 			break ;
-// 		pthread_mutex_lock(&ph->ph_mutex_left_fork);
-// 		// pthread_mutex_lock(&ph->ph_mutex_right_fork);
-// 		// if (can_eat(ph))
-// 		// {
-// 		while (i < 1000)
-// 		{
-// 			i++;
-// 		}
-// 			if (ph->argv_5 != 0)
-// 				ph->times_philo_eat--;
-// 			printf("philo [%d] is eating\n", i);
-
-
-// 			// usleep(ph->time_to_eat * 1000);
-// 		// }
-// 		// pthread_mutex_unlock(&ph->ph_mutex_right_fork);
-// 		pthread_mutex_unlock(&ph->ph_mutex_left_fork);
-// 		// usleep(ph->time_to_sleep * 1000);
-// 	}
-// 	return NULL;
-// }

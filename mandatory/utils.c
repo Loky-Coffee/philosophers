@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 01:53:42 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/05/12 10:48:05 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/06 20:39:39 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,16 @@ void	is_all_int(int argc, char **argv)
 	}
 }
 
-unsigned long long get_time(void)
+unsigned long long int get_time(void)
 {
 	struct timeval tv;
-	unsigned long long ms;
-	unsigned long long sec;
-	unsigned long long usec;
+	unsigned long long int ms;
+	unsigned long long int sec;
+	unsigned long long int usec;
 
 	gettimeofday(&tv, NULL);
-	sec = (unsigned long long)tv.tv_sec;
-	usec = (unsigned long long)tv.tv_usec;
+	sec = (unsigned long long int)tv.tv_sec;
+	usec = (unsigned long long int)tv.tv_usec;
 	ms = sec * 1000ULL + usec / 1000ULL;
 	return (ms);
 }

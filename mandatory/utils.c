@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 01:53:42 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/07 21:43:32 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/08 08:27:02 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ unsigned long long int get_time(void)
 	ms = sec * 1000ULL + usec / 1000ULL;
 	return (ms);
 }
+
 void terminate(t_env *env, int i)
 {
 	while (i != -1)
@@ -79,5 +80,8 @@ void terminate(t_env *env, int i)
 		i--;
 	}
 	free(env->lock_left_fork);
-	// free(env->lock_right_fork);
+	free(env->lock_right_fork);
+	pthread_mutex_destroy(&env->lock_fork);
+	pthread_mutex_destroy(&env->free_fork);
+	pthread_mutex_destroy(&env->lock_last_time_eat);
 }

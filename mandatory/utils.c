@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 01:53:42 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/08 08:27:02 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/08 22:54:27 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,12 @@ void	is_all_int(int argc, char **argv)
 	}
 }
 
-unsigned long long int get_time(void)
+unsigned long long int	get_time(void)
 {
-	struct timeval tv;
-	unsigned long long int ms;
-	unsigned long long int sec;
-	unsigned long long int usec;
+	struct timeval			tv;
+	unsigned long long int	ms;
+	unsigned long long int	sec;
+	unsigned long long int	usec;
 
 	gettimeofday(&tv, NULL);
 	sec = (unsigned long long int)tv.tv_sec;
@@ -71,16 +71,14 @@ unsigned long long int get_time(void)
 	return (ms);
 }
 
-void terminate(t_env *env, int i)
+void	terminate(t_env *env, int i)
 {
 	while (i != -1)
 	{
 		pthread_mutex_destroy(&env->lock_left_fork[i]);
-		pthread_mutex_destroy(&env->lock_right_fork[i]);
 		i--;
 	}
 	free(env->lock_left_fork);
-	free(env->lock_right_fork);
 	pthread_mutex_destroy(&env->lock_fork);
 	pthread_mutex_destroy(&env->free_fork);
 	pthread_mutex_destroy(&env->lock_last_time_eat);

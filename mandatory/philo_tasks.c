@@ -12,10 +12,19 @@
 
 #include "philo.h"
 
+void	ft_sleep(unsigned long long time)
+{
+	unsigned long long int	start;
+
+	start = get_time();
+	while (get_time() - start < time / 1000)
+		usleep(100);
+}
+
 void	give_fork_back(t_philo *ph)
 {
 	pthread_mutex_lock(&ph->env->free_fork);
-	printf("ph->index[%d]\n", ph->index);
+	// printf("ph->index[%d]\n", ph->index);
 	if ((ph->index) == ph->env->philo_nbr && ph->env->philo_nbr % 2 != 0)
 	{
 		pthread_mutex_unlock(&ph->env->lock_left_fork[ph->index % ph->env->philo_nbr]);
@@ -36,7 +45,7 @@ void	give_fork_back(t_philo *ph)
 
 void try_take_fork(t_philo *ph)
 {
-	printf("TRY Take ! ph->index[%d]\n", ph->index);
+	// printf("TRY Take ! ph->index[%d]\n", ph->index);
 	pthread_mutex_lock(&ph->env->lock_fork);
 	if ((ph->index) == ph->env->philo_nbr && ph->env->philo_nbr % 2 != 0)
 	{
@@ -65,7 +74,7 @@ void *check_philo_death(void *arg)
 	int		i;
 
 	i = 1;
-	usleep(6000);
+	// ft_sleep(6000);
 	while (true)
 	{
 		if (env->philo_nbr && i >= env->philo_nbr)
@@ -85,7 +94,7 @@ void *check_philo_death(void *arg)
 			exit(0);
 		}
 		i++;
-		usleep(1000);
+		ft_sleep(1000);
 	}
 	return NULL;
 }
@@ -94,16 +103,17 @@ void *schedule_action(void *arg)
 {
 	t_philo *ph = (t_philo *)arg;
 	if (ph->index % 2 == 0)
-		usleep(ph->time_to_eat / 2);
+		ft_sleep(ph->time_to_eat / 2);
 	while (true)
 	{
-		try_take_fork(ph);
+		if (ph->env->death != true && ph->env->philo_nbr > 1)
+			try_take_fork(ph);
 		pthread_mutex_lock(&ph->env->lock_last_time_eat);
 		ph->last_eat_time = get_time();
 		pthread_mutex_unlock(&ph->env->lock_last_time_eat);
 		if (ph->env->death != true && ph->env->philo_nbr > 1)
 			printf("%llu %d is eating\n", get_time(), ph->index);
-		usleep(ph->time_to_eat);
+		ft_sleep(ph->time_to_eat);
 		give_fork_back(ph);
 		if (ph->env->min_meals > 0)
 		{
@@ -118,11 +128,11 @@ void *schedule_action(void *arg)
 		}
 		if (ph->env->death != true)
 			printf("%llu %d is sleeping\n", get_time(), ph->index);
-		usleep(ph->time_to_sleep);
+		ft_sleep(ph->time_to_sleep);
 		if (ph->env->death != true)
 		{
 			printf("%llu %d is thinking\n", get_time(), ph->index);
-			usleep((ph->time_to_eat + ph->time_to_sleep) - (ph->time_to_die / 2));
+			// ft_sleep((ph->time_to_eat + ph->time_to_sleep) - (ph->time_to_die / 2));
 		}
 	}
 	return NULL;

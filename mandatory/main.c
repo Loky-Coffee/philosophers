@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 22:01:43 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/07 21:44:22 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/08 02:11:46 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@ void	init_values(char **argv, t_env *env)
 {
 	int i;
 
-	i = 0;
-	while (i < env->philo_nbr)
+	i = 1;
+	while (i <= env->philo_nbr)
 	{
-		env->ph[i].time_to_die = (ft_atoi(argv[2]) * 1000);
+		env->ph[i].time_to_die = (ft_atoi(argv[2]));
 		env->ph[i].time_to_eat = (ft_atoi(argv[3]) * 1000);
 		env->ph[i].time_to_sleep = (ft_atoi(argv[4]) * 1000);
-		env->ph[i].philo_meals = 1;
+		env->ph[i].philo_meals = 0;
 		env->ph[i].index = i;
 		env->ph[i].env = env;
 		i++;
@@ -45,7 +45,7 @@ int	main(int argc, char **argv)
 		env.min_meals = ft_atoi(argv[5]);
 	if (argc >= 5 && argc <= 6)
 		is_all_int (argc, argv);
-	env.ph = malloc(env.philo_nbr * sizeof(t_philo));
+	env.ph = calloc(env.philo_nbr + 1, sizeof(t_philo));
 	if (env.ph == NULL)
 		return (printf("ERROR: Memory allocation failed!\n"), 1);
 	init_values(argv, &env);

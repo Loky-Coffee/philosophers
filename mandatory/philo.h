@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 01:03:30 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/07 21:38:01 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/08 02:24:16 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct s_philo
 	int						time_to_eat;
 	int						time_to_sleep;
 	int						philo_meals;
+	unsigned long long int	last_eat_time;
 	char					*argv_5;
 	int						index;
 	t_env					*env;
@@ -50,11 +51,13 @@ typedef struct s_x
 	bool					death;
 	int						min_meals;
 	int						philo_nbr;
-	pthread_mutex_t			mutex;
 	unsigned long			sec;
 	unsigned long			usec;
 	int						run;
 	t_philo					*ph;
+	pthread_mutex_t			lock_fork;
+	pthread_mutex_t			free_fork;
+	pthread_mutex_t			lock_last_time_eat;
 	pthread_mutex_t			*lock_left_fork;
 	pthread_mutex_t			*lock_right_fork;
 }	t_env;

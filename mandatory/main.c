@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 22:01:43 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/08 02:11:46 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/08 22:56:42 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	init_values(char **argv, t_env *env)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	while (i <= env->philo_nbr)
@@ -30,6 +30,7 @@ void	init_values(char **argv, t_env *env)
 	if (argv[5] != NULL)
 		env->min_meals = ft_atoi(argv[5]);
 	env->death = false;
+	env->start_time = get_time();
 }
 
 int	main(int argc, char **argv)
@@ -39,6 +40,10 @@ int	main(int argc, char **argv)
 
 	if (argc < 5 || argc > 6)
 		return (printf(RED"ERROR: Wrong number of aqument!%s\n"RESET, CRY), 1);
+	if (argv[5] && argv[5][0] == '0')
+		return (printf \
+		(RED"ERROR: The philosophers must be allowed to eat at least once!%s\n" \
+		RESET, CRY), 1);
 	env = (t_env){0};
 	env.philo_nbr = ft_atoi(argv[1]);
 	if (argv[5] != NULL)

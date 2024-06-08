@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 02:04:21 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/08 08:17:22 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/08 22:42:19 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,41 +28,50 @@ void	give_fork_back(t_philo *ph)
 	if ((ph->index) == ph->env->philo_nbr && ph->env->philo_nbr % 2 != 0)
 	{
 		pthread_mutex_unlock(&ph->env->lock_left_fork[ph->index % ph->env->philo_nbr]);
-		pthread_mutex_unlock(&ph->env->lock_right_fork[ph->index - 1]);
+		pthread_mutex_unlock(&ph->env->lock_left_fork[ph->index - 1]);
 	}
 	else if (ph->index % 2 == 0)
 	{
 		pthread_mutex_unlock(&ph->env->lock_left_fork[ph->index + 1]);
-		pthread_mutex_unlock(&ph->env->lock_right_fork[ph->index]);
+		pthread_mutex_unlock(&ph->env->lock_left_fork[ph->index]);
 	}
 	else
 	{
 		pthread_mutex_unlock(&ph->env->lock_left_fork[ph->index]);
-		pthread_mutex_unlock(&ph->env->lock_right_fork[ph->index + 1]);
+		pthread_mutex_unlock(&ph->env->lock_left_fork[ph->index + 1]);
 	}
 	pthread_mutex_unlock(&ph->env->free_fork);
 }
 
 void try_take_fork(t_philo *ph)
 {
-	// printf("TRY Take ! ph->index[%d]\n", ph->index);
 	pthread_mutex_lock(&ph->env->lock_fork);
-	if ((ph->index) == ph->env->philo_nbr && ph->env->philo_nbr % 2 != 0)
-	{
-		pthread_mutex_lock(&ph->env->lock_left_fork[ph->index % ph->env->philo_nbr]);
-		pthread_mutex_lock(&ph->env->lock_right_fork[ph->index - 1]);
-	}
-	else if (ph->index % 2 == 0)
-	{
-		pthread_mutex_lock(&ph->env->lock_left_fork[ph->index + 1]);
-		pthread_mutex_lock(&ph->env->lock_right_fork[ph->index]);
-	}
-	else
+	if (ph->env->philo_nbr == 1 && ph->env->death != true)
 	{
 		pthread_mutex_lock(&ph->env->lock_left_fork[ph->index]);
-		pthread_mutex_lock(&ph->env->lock_right_fork[ph->index + 1]);
+		printf(YELLOW"%llu %d has taken a fork %s\n"RESET, get_time() - ph->env->start_time, ph->index, TAKE_FORK);
 	}
-	printf("%llu %d has taken a fork\n", get_time(), ph->index);
+	else if (ph->index == ph->env->philo_nbr - 1 && ph->env->philo_nbr % 2 != 0 && ph->index != 0 && ph->env->death != true)
+	{
+		pthread_mutex_lock(&ph->env->lock_left_fork[ph->index]);
+		printf(YELLOW"%llu %d has taken a fork %s\n"RESET, get_time() - ph->env->start_time, ph->index, TAKE_FORK);
+		pthread_mutex_lock(&ph->env->lock_left_fork[ph->index - 1]);
+		printf(YELLOW"%llu %d has taken a fork %s\n"RESET, get_time() - ph->env->start_time, ph->index, TAKE_FORK);
+	}
+	else if (ph->index % 2 == 0 && ph->env->death != true)
+	{
+		pthread_mutex_lock(&ph->env->lock_left_fork[ph->index + 1]);
+		printf(YELLOW"%llu %d has taken a fork %s\n"RESET, get_time() - ph->env->start_time, ph->index, TAKE_FORK);
+		pthread_mutex_lock(&ph->env->lock_left_fork[ph->index]);
+		printf(YELLOW"%llu %d has taken a fork %s\n"RESET, get_time() - ph->env->start_time, ph->index, TAKE_FORK);
+	}
+	else if(ph->env->death != true)
+	{
+		pthread_mutex_lock(&ph->env->lock_left_fork[ph->index]);
+		printf(YELLOW"%llu %d has taken a fork %s\n"RESET, get_time() - ph->env->start_time, ph->index, TAKE_FORK);
+		pthread_mutex_lock(&ph->env->lock_left_fork[ph->index + 1]);
+		printf(YELLOW"%llu %d has taken a fork %s\n"RESET, get_time() - ph->env->start_time, ph->index, TAKE_FORK);
+	}
 	pthread_mutex_unlock(&ph->env->lock_fork);
 }
 
@@ -74,7 +83,6 @@ void *check_philo_death(void *arg)
 	int		i;
 
 	i = 1;
-	// ft_sleep(6000);
 	while (true)
 	{
 		if (env->philo_nbr && i >= env->philo_nbr)
@@ -88,13 +96,20 @@ void *check_philo_death(void *arg)
 			}
 			i = 1;
 		}
-		if ((((get_time() - env->ph[i].last_eat_time) >= (unsigned long long)env->ph[i].time_to_die) && env->ph[i].last_eat_time != 0) || env->philo_nbr <= 1)
+		if (env->philo_nbr == 1)
 		{
-			printf("%llu %d died\n", get_time(), i);
+			ft_sleep(env->ph[i].time_to_die * 1000);
+			printf(RED"%llu %d died %s\n"RESET, get_time() - env->start_time, i, DIE);
+			exit(0);
+		}
+		if ((((get_time() - env->ph[i].last_eat_time) >= (unsigned long long)env->ph[i].time_to_die) && env->ph[i].last_eat_time != 0))
+		{
+			env->death = true;
+			printf(RED"%llu %d died %s\n"RESET, get_time() - env->start_time, i, DIE);
 			exit(0);
 		}
 		i++;
-		ft_sleep(1000);
+		// ft_sleep(1000);
 	}
 	return NULL;
 }
@@ -104,36 +119,33 @@ void *schedule_action(void *arg)
 	t_philo *ph = (t_philo *)arg;
 	if (ph->index % 2 == 0)
 		ft_sleep(ph->time_to_eat / 2);
-	while (true)
+	while (ph->env->death != true)
 	{
-		if (ph->env->death != true && ph->env->philo_nbr > 1)
+		if (ph->env->death != true)
 			try_take_fork(ph);
 		pthread_mutex_lock(&ph->env->lock_last_time_eat);
 		ph->last_eat_time = get_time();
 		pthread_mutex_unlock(&ph->env->lock_last_time_eat);
 		if (ph->env->death != true && ph->env->philo_nbr > 1)
-			printf("%llu %d is eating\n", get_time(), ph->index);
+			printf(GREEN"%llu %d is eating %s\n"RESET, get_time() - ph->env->start_time, ph->index, EAT);
 		ft_sleep(ph->time_to_eat);
 		give_fork_back(ph);
-		if (ph->env->min_meals > 0)
+		if (ph->env->min_meals > 0 && ph->env->philo_nbr > 1)
 		{
 			ph->philo_meals++;
-			if (ph->philo_meals >= ph->env->min_meals)
+			if (ph->philo_meals >= ph->env->min_meals && ph->env->death != true)
 			{
 				ph->last_eat_time = 0;
 				give_fork_back(ph);
-				printf("%llu %d is sleeping\n", get_time(), ph->index);
+				printf(MAGENTA"%llu %d is sleeping %s\n"RESET, get_time() - ph->env->start_time, ph->index, SLEEP);
 				break ;
 			}
 		}
-		if (ph->env->death != true)
-			printf("%llu %d is sleeping\n", get_time(), ph->index);
+		if (ph->env->death != true  && ph->env->philo_nbr > 1)
+			printf(MAGENTA"%llu %d is sleeping %s\n"RESET, get_time() - ph->env->start_time, ph->index, SLEEP);
 		ft_sleep(ph->time_to_sleep);
-		if (ph->env->death != true)
-		{
-			printf("%llu %d is thinking\n", get_time(), ph->index);
-			// ft_sleep((ph->time_to_eat + ph->time_to_sleep) - (ph->time_to_die / 2));
-		}
+		if (ph->env->death != true  && ph->env->philo_nbr > 1)
+			printf(BLUE"%llu %d is thinking %s\n"RESET, get_time() - ph->env->start_time, ph->index, THINKING);
 	}
 	return NULL;
 }
@@ -164,20 +176,19 @@ int init_threads(t_env *env)
 	pthread_t	*philo_thread;
 	pthread_t	death_thread;
 	int			result = 0;
+	int 		i;
 
-	int i = 1;
+	i = 1;
 	pthread_mutex_init(&env->lock_fork, NULL);
 	pthread_mutex_init(&env->free_fork, NULL);
 	pthread_mutex_init(&env->lock_last_time_eat, NULL);
-	env->lock_left_fork = malloc(env->philo_nbr * sizeof(pthread_mutex_t));
-	env->lock_right_fork = malloc(env->philo_nbr * sizeof(pthread_mutex_t));
+	env->lock_left_fork = calloc(env->philo_nbr, sizeof(pthread_mutex_t));
 	philo_thread = calloc(env->philo_nbr, sizeof(pthread_t));
 	if (pthread_create(&death_thread, NULL, check_philo_death, (void *)env) != 0)
 		return(result = -1, result);
 	while (i <= env->philo_nbr)
 	{
 		pthread_mutex_init(&env->lock_left_fork[i], NULL);
-		pthread_mutex_init(&env->lock_right_fork[i], NULL);
 		env->ph[i].last_eat_time = get_time();
 		if (pthread_create(&philo_thread[i], NULL, schedule_action, (void *)&env->ph[i]) != 0)
 		{
@@ -186,8 +197,6 @@ int init_threads(t_env *env)
 		}
 		i++;
 	}
-	pthread_mutex_init(&env->lock_left_fork[i], NULL);
-	pthread_mutex_init(&env->lock_right_fork[i], NULL);
 	pthread_join(death_thread, NULL);
 	join_threads(env, result, philo_thread);
 	terminate(env, i);

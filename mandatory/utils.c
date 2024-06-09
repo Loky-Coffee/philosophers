@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 01:53:42 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/09 01:13:46 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/09 16:43:30 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,17 +71,23 @@ unsigned long long int	get_time(void)
 	return (ms);
 }
 
-void	terminate(t_env *env, int i)
+void	*ft_calloc(size_t count, size_t size)
 {
-	while (i != -1)
+	size_t		i;
+	char		*str;
+
+	i = 0;
+	if (size != 0 && count > SIZE_MAX / size)
+		return (NULL);
+	str = (char *)malloc(count * size);
+	if (str == NULL)
+		return (NULL);
+	while (i < count * size)
 	{
-		pthread_mutex_destroy(&env->l_fork[i]);
-		i--;
+		str[i] = 0;
+		i++;
 	}
-	free(env->l_fork);
-	pthread_mutex_destroy(&env->lock_fork);
-	pthread_mutex_destroy(&env->free_fork);
-	pthread_mutex_destroy(&env->lock_last_time_eat);
+	return (str);
 }
 
 void	ft_sleep(unsigned long long time)

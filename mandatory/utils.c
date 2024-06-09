@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 01:53:42 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/08 22:54:27 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/09 01:13:46 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	is_all_int(int argc, char **argv)
 			if (argv[x][y] < '0' || argv[x][y] > '9')
 			{
 				printf(\
-				RED"ERROR: Only number allower als aqument! %s\n"RESET, CRY);
+				RED"ERROR: Only digits allower als aqument! %s\n"R, CRY);
 				exit(EXIT_FAILURE);
 			}
 			y++;
@@ -75,11 +75,20 @@ void	terminate(t_env *env, int i)
 {
 	while (i != -1)
 	{
-		pthread_mutex_destroy(&env->lock_left_fork[i]);
+		pthread_mutex_destroy(&env->l_fork[i]);
 		i--;
 	}
-	free(env->lock_left_fork);
+	free(env->l_fork);
 	pthread_mutex_destroy(&env->lock_fork);
 	pthread_mutex_destroy(&env->free_fork);
 	pthread_mutex_destroy(&env->lock_last_time_eat);
+}
+
+void	ft_sleep(unsigned long long time)
+{
+	unsigned long long int	start;
+
+	start = get_time();
+	while (get_time() - start < time / 1000)
+		usleep(100);
 }

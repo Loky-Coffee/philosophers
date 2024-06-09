@@ -6,7 +6,7 @@
 #    By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/03 21:43:44 by aalatzas          #+#    #+#              #
-#    Updated: 2024/06/06 20:16:02 by aalatzas         ###   ########.fr        #
+#    Updated: 2024/06/08 23:19:12 by aalatzas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,8 @@ SRC = \
 			$(SRC_DIR)main.c \
 			$(SRC_DIR)utils.c \
 			$(SRC_DIR)philo_tasks.c \
+			$(SRC_DIR)handel_fork.c \
+			$(SRC_DIR)threads.c \
 
 OBJ = $(addprefix $(OBJ_DIR), $(notdir $(SRC:.c=.o)))
 

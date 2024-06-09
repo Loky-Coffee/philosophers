@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 01:03:30 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/09 04:07:22 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/09 16:44:34 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,9 @@ typedef struct s_x
 	pthread_mutex_t			*l_fork;
 }	t_env;
 
+//main.c
+void					terminate(t_env *env, int i);
+
 //threads.c
 int						join_threads(t_env *env, pthread_t	*philo_thread);
 int						init_threads(t_env *env);
@@ -99,7 +102,7 @@ void					*schedule_action(void *arg);
 int						ft_atoi(const char *str);
 void					is_all_int(int argc, char **argv);
 unsigned long long int	get_time(void);
-void					terminate(t_env *env, int i);
+void					*ft_calloc(size_t count, size_t size);
 void					ft_sleep(unsigned long long time);
 
 #endif

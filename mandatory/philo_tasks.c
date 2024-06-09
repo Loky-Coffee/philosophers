@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 02:04:21 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/09 04:21:20 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/09 16:39:29 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	philo_is_death(t_env *env, int i)
 		printf(RED"%llu %d died %s\n"R, get_time() - env->s_t, i, DIE);
 		exit(0);
 	}
+	usleep(100);
 	if ((((get_time() - env->ph[i].last_eat_time) >= \
 	(unsigned long long)env->ph[i].time_to_die) \
 	&& env->ph[i].last_eat_time != 0))

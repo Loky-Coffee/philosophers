@@ -6,12 +6,12 @@
 #    By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/03 21:43:44 by aalatzas          #+#    #+#              #
-#    Updated: 2024/06/08 23:19:12 by aalatzas         ###   ########.fr        #
+#    Updated: 2024/06/09 16:58:58 by aalatzas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -pthread -g -fsanitize=address
+CFLAGS = -Wall -Werror -Wextra -pthread #-g -fsanitize=address
 
 ################################################################################
 ####		 				 PHILO_MANDATORY_PART_RULES					   #####
@@ -52,40 +52,6 @@ t2: $(NAME)
 t: $(NAME)
 
 re: fclean all
-
-################################################################################
-####						 PHILO_BONUS_PART_RULES 					   #####
-################################################################################
-NAME_BONUS = philo_bonus
-OBJ_DIR_BONUS = bonus/obj/
-SRC_DIR_BONUS = bonus/
-
-SRC_BONUS = \
-			$(SRC_DIR_BONUS)$(NAME_BONUS)_bonus.c \
-
-
-
-OBJ_BONUS = $(addprefix $(OBJ_DIR_BONUS), $(notdir $(SRC_BONUS:.c=.o)))
-
-bonus: $(NAME_BONUS)
-	@$(CC) $(CFLAGS) -o $(NAME_BONUS) $(OBJ_BONUS) $(LIBFT1)
-
-$(OBJ_DIR_BONUS)%.o: $(SRC_DIR_BONUS)%.c
-	@mkdir -p $(OBJ_DIR_BONUS)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-clean_bonus:
-	@rm -rf $(OBJ_DIR_BONUS)
-
-fclean_bonus: clean_bonus
-	@rm -f $(NAME_BONUS)
-
-
-tb1: $(NAME)
-
-re_bonus: fclean_bonus bonus
-
-testb: all
 
 ################################################################################
 ####							  EXTRA_RULES 							   #####

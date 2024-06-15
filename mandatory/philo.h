@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 01:03:30 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/09 16:44:34 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/15 22:27:06 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,15 @@
 // # define CYAN		""
 // # define R			""
 
+typedef enum e_state
+{
+	E_TAKE_FORK,
+	E_EAT,
+	E_SLEEP,
+	E_THINKING,
+	E_DIE
+}	t_state;
+
 typedef struct s_x	t_env;
 
 typedef struct s_philo
@@ -60,7 +69,9 @@ typedef struct s_philo
 	int						time_to_eat;
 	int						time_to_sleep;
 	int						philo_meals;
+	pthread_mutex_t			lock_philo_meals;
 	unsigned long long int	last_eat_time;
+	pthread_mutex_t			lock_last_time_eat;
 	char					*argv_5;
 	int						index;
 	t_env					*env;
@@ -78,7 +89,8 @@ typedef struct s_x
 	unsigned long long int	s_t;
 	pthread_mutex_t			lock_fork;
 	pthread_mutex_t			free_fork;
-	pthread_mutex_t			lock_last_time_eat;
+	pthread_mutex_t			death_lock;
+	pthread_mutex_t			print_lock;
 	pthread_mutex_t			*l_fork;
 }	t_env;
 
@@ -94,6 +106,7 @@ void					give_fork_back(t_philo *ph);
 void					try_take_fork(t_philo *ph);
 
 //philo_tasks.c
+int						death_check(t_env *env);
 void					ft_sleep(unsigned long long time);
 void					*check_philo_death(void *arg);
 void					*schedule_action(void *arg);

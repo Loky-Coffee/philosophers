@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 22:01:43 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/15 23:47:03 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/16 00:55:00 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,15 @@ int	init_values(char **argv, t_env *env)
 		env->ph[i].time_to_die = (ft_atoi(argv[2]));
 		env->ph[i].time_to_eat = (ft_atoi(argv[3]) * 1000);
 		env->ph[i].time_to_sleep = (ft_atoi(argv[4]) * 1000);
-		env->ph[i].philo_meals = 0;
+		env->ph[i].philo_meals = 1;
 		env->ph[i].index = i;
 		env->ph[i].env = env;
 		i++;
 	}
 	if (argv[5] != NULL)
 		env->min_meals = ft_atoi(argv[5]);
+	else
+		env->min_meals = -1;
 	env->death = false;
 	return (0);
 }

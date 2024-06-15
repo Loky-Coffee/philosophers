@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 22:01:43 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/15 19:52:44 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/15 23:47:03 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ int	init_values(char **argv, t_env *env)
 	if (argv[5] != NULL)
 		env->min_meals = ft_atoi(argv[5]);
 	env->death = false;
-	env->s_t = get_time();
 	return (0);
 }
 

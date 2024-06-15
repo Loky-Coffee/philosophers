@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 23:03:23 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/15 22:40:19 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/15 23:47:24 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	join_threads(t_env *env, pthread_t	*philo_thread)
 {
 	int	i;
 
-	i = 0;
+	i = 1;
 	while (i <= env->philo_nbr)
 	{
 		if (pthread_join(philo_thread[i], NULL) != 0)
@@ -43,6 +43,7 @@ int	init_threads(t_env *env)
 	init_mutex(env);
 	env->l_fork = ft_calloc(env->philo_nbr, sizeof(pthread_mutex_t));
 	philo_thread = ft_calloc(env->philo_nbr, sizeof(pthread_t));
+	env->s_t = get_time();
 	if (pthread_create(&die_thread, NULL, check_philo_death, (void *)env) != 0)
 		return (1);
 	while (i <= env->philo_nbr)

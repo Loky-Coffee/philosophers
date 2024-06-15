@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 02:04:21 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/15 23:27:11 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/15 23:59:33 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ unsigned long long print_msg(t_env *env, int index, char *msg,t_state state)
 	{
 		time = get_time() - env->s_t;
 		if (state == E_TAKE_FORK)
-			printf("%llu %d %s %s\n", time, index, msg, TAKE_FORK);
+			printf(Y"%llu %d %s %s\n"R, time, index, msg, TAKE_FORK);
 		else if (state == E_EAT)
 			printf(GREEN"%llu %d %s %s\n"R, time, index, msg, EAT);
 		else if (state == E_SLEEP)
@@ -78,9 +78,10 @@ unsigned long long last_time(t_philo *ph)
 int	philo_is_death(t_env *env, int i)
 {
 	usleep(100);
+	printf("###############");
 	if (env->philo_nbr == 1)
 	{
-		ft_sleep(env->ph[i].time_to_die * 1000);
+		// ft_sleep(env->ph[i].time_to_die * 1000);
 		printf(RED"%llu %d died %s\n"R, get_time() - env->s_t, i, DIE);
 		exit(0);
 	}
@@ -99,14 +100,14 @@ int	philo_is_death(t_env *env, int i)
 	return (1);
 }
 
-// int check_min_meals(t_philo *ph)
-// {
-// 	int meals_buffer;
-// 	pthread_mutex_lock(&ph->lock_philo_meals);
-// 	meals_buffer = ph->philo_meals;
-// 	pthread_mutex_unlock(&ph->lock_philo_meals);
-// 	return (meals_buffer);
-// }
+int check_min_meals(t_philo *ph)
+{
+	int meals_buffer;
+	pthread_mutex_lock(&ph->lock_philo_meals);
+	meals_buffer = ph->philo_meals;
+	pthread_mutex_unlock(&ph->lock_philo_meals);
+	return (meals_buffer);
+}
 
 void	*check_philo_death(void *arg)
 {
@@ -120,18 +121,19 @@ void	*check_philo_death(void *arg)
 	{
 		if (i > env->philo_nbr)
 			i = 1;
-		// if (env->philo_nbr && i >= env->philo_nbr)
-		// {
-		// 	i = 1;
-		// 	while (env->min_meals > 0 && \
-		// 	check_min_meals(&env->ph[i]) >= env->min_meals)
-		// 	{
-		// 		if (i >= env->philo_nbr)
-		// 			exit(0);
-		// 		i++;
-		// 	}
-		// 	i = 1;
-		// }
+		if (env->philo_nbr && i >= env->philo_nbr)
+		{
+			i = 1;
+			while (env->min_meals > 0 && \
+			check_min_meals(&env->ph[i]) >= env->min_meals)
+			{
+				if (i >= env->philo_nbr)
+					exit(0);
+				i++;
+			}
+			i = 1;
+		}
+		printf("###############");
 		if(philo_is_death(env, i) == 0)
 			return (NULL);
 		i++;

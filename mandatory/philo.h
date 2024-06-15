@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 01:03:30 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/15 22:27:06 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/15 23:43:08 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ void					give_fork_back(t_philo *ph);
 void					try_take_fork(t_philo *ph);
 
 //philo_tasks.c
+unsigned long long		print_msg(t_env *env, int index, char *msg,t_state state);
 int						death_check(t_env *env);
 void					ft_sleep(unsigned long long time);
 void					*check_philo_death(void *arg);

@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 01:03:30 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/15 23:43:08 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/16 01:26:41 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,19 @@
 # include <pthread.h>
 # include <stdbool.h>
 
-# define CRY 		"\U0001F622"
-# define TAKE_FORK 	"\U0001F531"
-# define EAT		"\U0001F60B"
-# define SLEEP		"🛏️"
-# define THINKING	"\U0001F914"
-# define DIE		"\U0001F480"
+// # define CRY 		"\U0001F622"
+// # define TAKE_FORK 	"\U0001F531"
+// # define EAT		"\U0001F60B"
+// # define SLEEP		"🛏️"
+// # define THINKING	"\U0001F914"
+// # define DIE		"\U0001F480"
 
-// # define CRY 		""
-// # define TAKE_FORK 	""
-// # define EAT		""
-// # define SLEEP		""
-// # define THINKING	""
-// # define DIE		""
+# define CRY 		""
+# define TAKE_FORK 	""
+# define EAT		""
+# define SLEEP		""
+# define THINKING	""
+# define DIE		""
 
 //terminal collors
 # define RED		"\033[91m"
@@ -108,7 +108,6 @@ void					try_take_fork(t_philo *ph);
 //philo_tasks.c
 unsigned long long		print_msg(t_env *env, int index, char *msg,t_state state);
 int						death_check(t_env *env);
-void					ft_sleep(unsigned long long time);
 void					*check_philo_death(void *arg);
 void					*schedule_action(void *arg);
 

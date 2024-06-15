@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 23:02:57 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/15 23:55:14 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/16 01:32:55 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ void	try_take_fork(t_philo *ph)
 		}
 		else
 		{
+			printf("ph->index: %d\n", ph->index);
+			printf("ph->env->philo_nbr: %d\n", ph->env->philo_nbr);
 			pthread_mutex_lock(&ph->env->l_fork[ph->index]);
 			print_msg(ph->env, ph->index,"has taken a fork", E_TAKE_FORK);
 			pthread_mutex_lock(&ph->env->l_fork[ph->index - 1]);

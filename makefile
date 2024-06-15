@@ -6,12 +6,12 @@
 #    By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/03 21:43:44 by aalatzas          #+#    #+#              #
-#    Updated: 2024/06/09 16:58:58 by aalatzas         ###   ########.fr        #
+#    Updated: 2024/06/15 19:06:53 by aalatzas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -pthread #-g -fsanitize=address
+CFLAGS = -Wall -Werror -Wextra -pthread -g -fsanitize=thread
 
 ################################################################################
 ####		 				 PHILO_MANDATORY_PART_RULES					   #####

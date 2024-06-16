@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 23:03:23 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/16 21:47:52 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/17 01:00:58 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,11 @@ void	init_mutex(t_env *env)
 	pthread_mutex_init(&env->death_lock, NULL);
 	pthread_mutex_init(&env->print_lock, NULL);
 	pthread_mutex_init(&env->lock_s_t, NULL);
+	pthread_mutex_init(&env->start_sim_lock, NULL);
 	while (i <= env->philo_nbr)
 	{
-		pthread_mutex_lock(&env->ph[i].lock_philo_meals);
 		pthread_mutex_init(&env->ph[i].lock_last_time_eat, NULL);
+		pthread_mutex_init(&env->ph[i].lock_philo_meals, NULL);
 		pthread_mutex_init(&env->l_fork[i], NULL);
 		i++;
 	}
@@ -56,16 +57,25 @@ int	init_threads(t_env *env)
 	if (env->l_fork == NULL || philo_thread == NULL)
 		return (1);
 	init_mutex(env);
-	if (env->s_t == 0)
-		env->s_t = get_time();
 	while (i <= env->philo_nbr)
 	{
-		env->ph[i].last_eat_time = env->s_t;
-		if (pthread_create(&philo_thread[i], NULL, \
-		schedule_action, (void *)&env->ph[i]) != 0)
+		if (pthread_create(&philo_thread[i], NULL, schedule_action, (void *)&env->ph[i]) != 0)
 			return (1);
 		i++;
 	}
+	if (env->s_t == 0)
+		env->s_t = get_time();
+	i = 1;
+	while (i <= env->philo_nbr)
+	{
+		pthread_mutex_lock(&env->ph[i].lock_last_time_eat);
+		env->ph[i].last_eat_time = env->s_t;
+		pthread_mutex_unlock(&env->ph[i].lock_last_time_eat);
+		i++;
+	}
+	pthread_mutex_lock(&env->start_sim_lock);
+	env->start_sim = true;
+	pthread_mutex_unlock(&env->start_sim_lock);
 	check_philo_death(env);
 	if (join_threads(env, philo_thread) == 1)
 		return (1);

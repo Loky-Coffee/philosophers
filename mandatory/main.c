@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 22:01:43 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/16 00:55:00 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/16 21:48:29 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	terminate(t_env *env, int i)
 	while (i != -1)
 	{
 		pthread_mutex_destroy(&env->l_fork[i]);
+		pthread_mutex_destroy(&env->ph[i].lock_philo_meals);
 		pthread_mutex_destroy(&env->ph[i].lock_last_time_eat);
 		i--;
 	}
@@ -24,6 +25,8 @@ void	terminate(t_env *env, int i)
 	pthread_mutex_destroy(&env->lock_fork);
 	pthread_mutex_destroy(&env->free_fork);
 	pthread_mutex_destroy(&env->death_lock);
+	pthread_mutex_destroy(&env->print_lock);
+	pthread_mutex_destroy(&env->lock_s_t);
 }
 
 int	init_values(char **argv, t_env *env)

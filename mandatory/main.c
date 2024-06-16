@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 22:01:43 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/16 21:48:29 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/16 23:51:35 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	terminate(t_env *env, int i)
 	pthread_mutex_destroy(&env->death_lock);
 	pthread_mutex_destroy(&env->print_lock);
 	pthread_mutex_destroy(&env->lock_s_t);
+	pthread_mutex_destroy(&env->start_sim_lock);
 }
 
 int	init_values(char **argv, t_env *env)
@@ -53,6 +54,7 @@ int	init_values(char **argv, t_env *env)
 	else
 		env->min_meals = -1;
 	env->death = false;
+	env->start_sim = false;
 	return (0);
 }
 

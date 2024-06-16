@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 01:03:30 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/16 20:45:08 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/16 23:50:55 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ typedef struct s_x
 	int						run;
 	t_philo					*ph;
 	unsigned long long int	s_t;
+	bool					start_sim;
+	pthread_mutex_t			start_sim_lock;
 	pthread_mutex_t			lock_fork;
 	pthread_mutex_t			lock_s_t;
 	pthread_mutex_t			free_fork;

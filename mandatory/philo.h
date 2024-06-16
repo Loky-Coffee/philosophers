@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 01:03:30 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/16 01:26:41 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/16 20:45:08 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ typedef struct s_x
 	t_philo					*ph;
 	unsigned long long int	s_t;
 	pthread_mutex_t			lock_fork;
+	pthread_mutex_t			lock_s_t;
 	pthread_mutex_t			free_fork;
 	pthread_mutex_t			death_lock;
 	pthread_mutex_t			print_lock;
@@ -106,7 +107,8 @@ void					give_fork_back(t_philo *ph);
 void					try_take_fork(t_philo *ph);
 
 //philo_tasks.c
-unsigned long long		print_msg(t_env *env, int index, char *msg,t_state state);
+unsigned long long		print_msg(t_env *env, int index, \
+char *msg, t_state state);
 int						death_check(t_env *env);
 void					*check_philo_death(void *arg);
 void					*schedule_action(void *arg);

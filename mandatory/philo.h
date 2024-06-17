@@ -20,6 +20,7 @@
 # include <sys/time.h>
 # include <pthread.h>
 # include <stdbool.h>
+# include <stdint.h>
 
 // # define CRY 		"\U0001F622"
 // # define TAKE_FORK 	"\U0001F531"

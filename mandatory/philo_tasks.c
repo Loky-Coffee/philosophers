@@ -129,6 +129,7 @@ void	sleep_or_think(t_philo *ph)
 	ft_sleep(ph->time_to_sleep);
 	if (death_check(ph->env) != true && ph->env->philo_nbr > 1)
 		print_msg(ph->env, ph->index,"is thinking", E_THINKING);
+	usleep(100);
 }
 
 void	*schedule_action(void *arg)
@@ -137,6 +138,7 @@ void	*schedule_action(void *arg)
 	// unsigned long long eat_time;
 
 	ph = (t_philo *)arg;
+	
 	pthread_mutex_lock(&ph->env->start_sim_lock);
 	while (ph->env->start_sim == false)
 	{
@@ -155,11 +157,11 @@ void	*schedule_action(void *arg)
 	while (death_check(ph->env) != true)
 	{
 		try_take_fork(ph);
+		give_fork_back(ph);
 		pthread_mutex_lock(&ph->lock_last_time_eat);
 		ph->last_eat_time = print_msg(ph->env, ph->index, "is eating", E_EAT);
 		pthread_mutex_unlock(&ph->lock_last_time_eat);
 		ft_sleep(ph->time_to_eat);
-		give_fork_back(ph);
 		if (ph->env->min_meals != -1 && ph->env->philo_nbr > 1)
 		{
 			pthread_mutex_lock(&ph->lock_philo_meals);

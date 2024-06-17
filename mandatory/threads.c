@@ -79,6 +79,6 @@ int	init_threads(t_env *env)
 	check_philo_death(env);
 	if (join_threads(env, philo_thread) == 1)
 		return (1);
-	terminate(env, i);
+	terminate(env, --i);
 	return (0);
 }

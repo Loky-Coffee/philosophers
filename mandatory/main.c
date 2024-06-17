@@ -14,7 +14,7 @@
 
 void	terminate(t_env *env, int i)
 {
-	while (i != -1)
+	while (i > 0)
 	{
 		pthread_mutex_destroy(&env->l_fork[i]);
 		pthread_mutex_destroy(&env->ph[i].lock_philo_meals);

@@ -11,7 +11,15 @@
 # **************************************************************************** #
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -pthread -g -fsanitize=thread
+CFLAGS = -Wall -Werror -Wextra -lpthread -g #-fsanitize=thread
+
+#valgrin on:
+#export TSAN_OPTIONS=second_deadlock_stack=1
+#CFLAGS = -Wall -Werror -Wextra -lpthread -g
+#Leaks check
+#valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./philo <arguments>
+#Data race check
+#valgrind --tool=helgrind ./philo <arguments>
 
 ################################################################################
 ####		 				 PHILO_MANDATORY_PART_RULES					   #####

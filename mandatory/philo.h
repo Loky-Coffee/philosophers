@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 01:03:30 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/18 04:45:46 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/18 05:46:46 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,23 @@
 # include <stdbool.h>
 # include <stdint.h>
 
-// # define CRY 		"\U0001F622"
-// # define TAKE_FORK 	"\U0001F531"
-// # define EAT		"\U0001F60B"
-// # define SLEEP		"🛏️"
-// # define THINKING	"\U0001F914"
-// # define DIE		"\U0001F480"
+// emojis on
+# define CRY 		"\U0001F622"
+# define TAKE_FORK 	"\U0001F531"
+# define EAT		"\U0001F60B"
+# define SLEEP		"🛏️"
+# define THINKING	"\U0001F914"
+# define DIE		"\U0001F480"
 
-# define CRY 		""
-# define TAKE_FORK 	""
-# define EAT		""
-# define SLEEP		""
-# define THINKING	""
-# define DIE		""
+// emojis off
+// # define CRY 		""
+// # define TAKE_FORK 	""
+// # define EAT		""
+// # define SLEEP		""
+// # define THINKING	""
+// # define DIE		""
 
-//terminal collors
+//terminal collors on
 # define RED		"\033[91m"
 # define GREEN		"\033[92m"
 # define Y			"\033[93m"
@@ -44,7 +46,7 @@
 # define MAGENTA	"\033[95m"
 # define CYAN		"\033[96m"
 # define R			"\033[0m"
-
+//terminal collors off
 // # define RED		""
 // # define GREEN		""
 // # define Y			""

@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 04:43:41 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/18 04:47:17 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/18 05:38:11 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,10 @@ int	death_check(t_env *env)
 
 void	one_philo_die(t_env *env, int i)
 {
-	ft_sleep (env->ph[i].time_to_die * 1000);
 	pthread_mutex_lock (&env->death_lock);
 	env->death = true;
 	pthread_mutex_unlock (&env->death_lock);
+	ft_sleep (env->ph[i].time_to_die * 1000);
 	print_msg (env, env->ph[i].index, "died", E_DIE);
 }
 

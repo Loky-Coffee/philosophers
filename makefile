@@ -6,17 +6,17 @@
 #    By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/03 21:43:44 by aalatzas          #+#    #+#              #
-#    Updated: 2024/06/15 19:06:53 by aalatzas         ###   ########.fr        #
+#    Updated: 2024/06/18 04:54:49 by aalatzas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -lpthread -g #-fsanitize=thread
+CFLAGS = -Wall -Werror -Wextra -pthread -g -fsanitize=thread
 
-#valgrin on:
+# valgrin on:
 #export TSAN_OPTIONS=second_deadlock_stack=1
-#CFLAGS = -Wall -Werror -Wextra -lpthread -g
-#Leaks check
+# CFLAGS = -Wall -Werror -Wextra -lpthread -g
+# Leaks check
 #valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./philo <arguments>
 #Data race check
 #valgrind --tool=helgrind ./philo <arguments>
@@ -35,6 +35,7 @@ SRC = \
 			$(SRC_DIR)philo_tasks.c \
 			$(SRC_DIR)handel_fork.c \
 			$(SRC_DIR)threads.c \
+			$(SRC_DIR)check_philo_die.c \
 
 OBJ = $(addprefix $(OBJ_DIR), $(notdir $(SRC:.c=.o)))
 

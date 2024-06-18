@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 01:53:42 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/16 01:15:47 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/18 03:51:18 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,11 +90,11 @@ void	*ft_calloc(size_t count, size_t size)
 	return (str);
 }
 
-void	ft_sleep(unsigned long long time)
+void	ft_sleep(long long ms)
 {
-	unsigned long long int	start;
+	long long	start;
 
-	start = get_time();
-	while (get_time() - start < time / 1000)
-		usleep(100);
+	start = (long long)get_time();
+	while ((long long)(get_time() - start) < (ms / 1000))
+		usleep(300);
 }

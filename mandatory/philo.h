@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 01:03:30 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/16 23:50:55 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/18 04:45:46 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,9 +90,6 @@ typedef struct s_x
 	unsigned long long int	s_t;
 	bool					start_sim;
 	pthread_mutex_t			start_sim_lock;
-	pthread_mutex_t			lock_fork;
-	pthread_mutex_t			lock_s_t;
-	pthread_mutex_t			free_fork;
 	pthread_mutex_t			death_lock;
 	pthread_mutex_t			print_lock;
 	pthread_mutex_t			*l_fork;
@@ -101,8 +98,15 @@ typedef struct s_x
 //main.c
 void					terminate(t_env *env, int i);
 
+//check_philo_die.c
+int						death_check(t_env *env);
+void					one_philo_die(t_env *env, int i);
+void					check_philo_death(t_env *env);
+
 //threads.c
 int						join_threads(t_env *env, pthread_t	*philo_thread);
+void					init_mutex(t_env *env);
+void					sync_threads(t_philo *ph);
 int						init_threads(t_env *env);
 
 //handel_fork.c
@@ -113,7 +117,7 @@ void					try_take_fork(t_philo *ph);
 unsigned long long		print_msg(t_env *env, int index, \
 char *msg, t_state state);
 int						death_check(t_env *env);
-void					*check_philo_death(void *arg);
+void					check_philo_death(t_env *env);
 void					*schedule_action(void *arg);
 
 //utils.c
@@ -121,6 +125,6 @@ int						ft_atoi(const char *str);
 void					is_all_int(int argc, char **argv);
 unsigned long long int	get_time(void);
 void					*ft_calloc(size_t count, size_t size);
-void					ft_sleep(unsigned long long time);
+void					ft_sleep(long long time);
 
 #endif

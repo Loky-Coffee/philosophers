@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 22:01:43 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/16 23:51:35 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/18 04:26:57 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,8 @@ void	terminate(t_env *env, int i)
 		i--;
 	}
 	free(env->l_fork);
-	pthread_mutex_destroy(&env->lock_fork);
-	pthread_mutex_destroy(&env->free_fork);
 	pthread_mutex_destroy(&env->death_lock);
 	pthread_mutex_destroy(&env->print_lock);
-	pthread_mutex_destroy(&env->lock_s_t);
 	pthread_mutex_destroy(&env->start_sim_lock);
 }
 
@@ -36,7 +33,7 @@ int	init_values(char **argv, t_env *env)
 
 	i = 1;
 	env->philo_nbr = ft_atoi(argv[1]);
-	env->ph = calloc(env->philo_nbr + 1, sizeof(t_philo));
+	env->ph = ft_calloc(env->philo_nbr + 1, sizeof(t_philo));
 	if (env->ph == NULL)
 		return (printf("ERROR: Memory allocation failed!\n"), 1);
 	while (i <= env->philo_nbr)
@@ -44,7 +41,7 @@ int	init_values(char **argv, t_env *env)
 		env->ph[i].time_to_die = (ft_atoi(argv[2]));
 		env->ph[i].time_to_eat = (ft_atoi(argv[3]) * 1000);
 		env->ph[i].time_to_sleep = (ft_atoi(argv[4]) * 1000);
-		env->ph[i].philo_meals = 1;
+		env->ph[i].philo_meals = 0;
 		env->ph[i].index = i;
 		env->ph[i].env = env;
 		i++;

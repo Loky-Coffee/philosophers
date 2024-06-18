@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 02:04:21 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/18 04:47:07 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/18 05:35:35 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,12 @@ void	*schedule_action(void *arg)
 	t_philo	*ph;
 
 	ph = (t_philo *)arg;
+	sync_threads(ph);
 	if (ph->env->philo_nbr == 1)
 	{
 		ft_sleep(ph->time_to_die / 2);
 		try_take_fork(ph);
 	}
-	sync_threads(ph);
 	while (death_check(ph->env) != true)
 	{
 		try_take_fork(ph);

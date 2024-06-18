@@ -6,7 +6,7 @@
 /*   By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 23:03:23 by aalatzas          #+#    #+#             */
-/*   Updated: 2024/06/18 04:21:34 by aalatzas         ###   ########.fr       */
+/*   Updated: 2024/06/18 05:36:32 by aalatzas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,10 @@ void	set_first_time(t_env *env)
 	int	i;
 
 	i = 1;
+	pthread_mutex_lock(&env->print_lock);
 	if (env->s_t == 0)
 		env->s_t = get_time();
+	pthread_mutex_unlock(&env->print_lock);
 	while (i <= env->philo_nbr)
 	{
 		pthread_mutex_lock(&env->ph[i].lock_last_time_eat);

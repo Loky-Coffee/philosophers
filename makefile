@@ -6,19 +6,21 @@
 #    By: aalatzas <aalatzas@student.42heilbronn.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/03 21:43:44 by aalatzas          #+#    #+#              #
-#    Updated: 2024/06/18 04:54:49 by aalatzas         ###   ########.fr        #
+#    Updated: 2024/06/18 05:44:51 by aalatzas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -pthread -g -fsanitize=thread
+CFLAGS = -Wall -Werror -Wextra -pthread -g
 
 # valgrin on:
-#export TSAN_OPTIONS=second_deadlock_stack=1
+# export TSAN_OPTIONS=second_deadlock_stack=1
+## leaks check
+# -fsanitize=thread
+# dorker check leaks
 # CFLAGS = -Wall -Werror -Wextra -lpthread -g
-# Leaks check
-#valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./philo <arguments>
-#Data race check
+# valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./philo <arguments>
+# dorker Data race check
 #valgrind --tool=helgrind ./philo <arguments>
 
 ################################################################################
@@ -57,7 +59,7 @@ t1: $(NAME)
 	@./$(NAME) 5 20 20 20 2
 
 t2: $(NAME)
-	@./$(NAME) 10 10 10 10
+	@./$(NAME) 10 22 10 10
 t: $(NAME)
 
 re: fclean all
